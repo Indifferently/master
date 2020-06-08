@@ -1,22 +1,63 @@
 <?php
-touch('test.txt');
-file_put_contents('test.txt', 'Гай Юлий Цезарь родился в древней патрицианской семье Юлиев. В V—IV веках до н. э. Юлии играли значительную роль в жизни Рима. Из представителей семейства вышли, в частности, один диктатор, один магистр конницы (заместитель диктатора) и один член коллегии децемвиров, разработавших законы Десяти таблиц — первоначальный вариант знаменитых законов Двенадцати таблиц. Подобно большинству семейств с древней историей, Юлии имели общий миф о своём происхождении. Они возводили свой род к богине Венере через Энея. Мифическая версия происхождения Юлиев была хорошо известна уже к 200 году до н.э., и Катон Старший записал версию об этимологии родового имени Юлиев. По его мнению, первый носитель этого имени Юл получил прозвище от греческого слова «ἴουλος» (пушок, первые волосы на щеках и подбородке).
-Почти все Юлии в V—IV веках до н. э. носили когномен Юл, который, вероятно, был изначально единственным в их семействе. Ветвь Юлиев Цезарей наверняка происходила от Юлиев Юлов, хотя связующие звенья между ними неизвестны. Первым известным Цезарем был претор 208 года до н. э., упомянутый Титом Ливием. Этимология когномена «Caesar» достоверно неизвестна и была забыта уже в римскую эпоху. Элий Спартиан, один из авторов жизнеописаний Августов, записал четыре версии, бытовавшие к IV веку н. э. До настоящего времени достоверная этимология имени неясна, но чаще предполагается происхождение когномена из этрусского языка (aisar — бог; схожее происхождение имеют римские имена Цезий, Цезоний и ЦезеннийК началу I века до н. э. в Риме были известны две ветви Юлиев Цезарей. Они находились друг с другом в достаточно близком, но точно не установленном родстве.');
-file_get_contents('test.txt');
-if (!mkdir('test1/test2',0777,true) && !is_dir ('test1/test2')){
-    echo "test1/test2 not created".PHP_EOL;
-}
-
-$file = fopen('test.txt', 'r');
-while($line = fgets($file)) {
-    echo $line;
-}
-fclose($file);
-if (!empty($_test['txt']['test'])){
-    $txt = $_test['txt'];
-    foreach ($txt['tmp_test'] as $index => $tmpPath) {
-        if (!array_key_exists($index,$txt['test'])){
-            continue;
-        }
-        move_uploaded_file($tmpPath,DIR.DIRECTORY_SEPARATOR.$txt['test'][$index]);
+function countWords($typeFile,$message)
+{
+    if($typeFile === 'file')
+    {
+        $pathFile = 'File';
     }
+    else
+    {
+        $pathFile = 'Input';
+    }
+    $symbol = [",",".","-",PHP_EOL];
+    $arrayAssoc=[];
+    $message = str_replace($symbol,"",$message);
+    $message = mb_strtolower($message);
+    $array = explode(" ",$message);
+    foreach ($array as $word)
+    {
+        if(!array_key_exists($word,$arrayAssoc))
+        {
+            $arrayAssoc[$word] = 1;
+        }
+        else
+        {
+            $arrayAssoc[$word] += 1;
+        }
+    }
+    $list = array(array("Word","Count"));
+    foreach ($arrayAssoc as $key => $Value)
+    {
+        array_push($list,array($key,$Value));
+    }
+    array_push($list,array("total words",count($arrayAssoc)));
+    $path = "Result/{$pathFile}/".date("U").".csv";
+    $fp = fopen($path,'w');
+    foreach ($list as $lines)
+    {
+        fputcsv($fp,$lines);
+    }
+    fclose($fp);
+}
+if(!is_dir("Result"))
+{
+    mkdir("Result",0777,true);
+}
+if(!is_dir("Result/File"))
+{
+    mkdir("Result/File",0777,true);
+}
+if(!is_dir("Result/Input"))
+{
+    mkdir("Result/Input",0777,true);
+}
+if(!empty($_FILES['docs']['name']))
+{
+    $valueText = file_get_contents($_FILES['docs']['tmp_name']);
+    countWords('file',$valueText);
+}
+if(!empty($_POST['Message'])){
+    $text = $_POST['Message'];
+    countWords('text',$text);
+}
+?>
