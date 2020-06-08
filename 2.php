@@ -1,9 +1,9 @@
 <?php
 function countWords($typeFile,$message2)
 {
-    if($typeFile === 'file')
+    if($typeFile === 'файл')
     {
-        $pathFile = 'File';
+        $pathFile = 'Файл';
     }
     else
     {
@@ -25,12 +25,12 @@ function countWords($typeFile,$message2)
             $arrayAssoc[$word] += 1;
         }
     }
-    $list = array(array("Word","Count"));
+    $list = array(array("Слов","Подсчитать"));
     foreach ($arrayAssoc as $key => $Value)
     {
         array_push($list,array($key,$Value));
     }
-    array_push($list,array("total words",count($arrayAssoc)));
+    array_push($list,array("Слов",count($arrayAssoc)));
     $path = "Result/{$pathFile}/".date("U").".csv";
     $fp = fopen($path,'w');
     foreach ($list as $lines)
@@ -54,10 +54,10 @@ if(!is_dir("Result/Input"))
 if(!empty($_FILES['docs']['name']))
 {
     $valueText = file_get_contents($_FILES['docs']['tmp_name']);
-    countWords('file',$valueText);
+    countWords('файл',$valueText);
 }
-if(!empty($_POST['Message'])){
-    $text = $_POST['Message'];
+if(!empty($_POST['Message2'])){
+    $text = $_POST['Message2'];
     countWords('text',$text);
 }
 ?>
