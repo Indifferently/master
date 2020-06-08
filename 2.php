@@ -1,5 +1,5 @@
 <?php
-function countWords($typeFile,$message)
+function countWords($typeFile,$message2)
 {
     if($typeFile === 'file')
     {
@@ -11,9 +11,9 @@ function countWords($typeFile,$message)
     }
     $symbol = [",",".","-",PHP_EOL];
     $arrayAssoc=[];
-    $message = str_replace($symbol,"",$message);
-    $message = mb_strtolower($message);
-    $array = explode(" ",$message);
+    $message2 = str_replace($symbol,"",$message2);
+    $message2 = mb_strtolower($message2);
+    $array = explode(" ",$message2);
     foreach ($array as $word)
     {
         if(!array_key_exists($word,$arrayAssoc))
