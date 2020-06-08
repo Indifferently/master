@@ -60,4 +60,3 @@ if(!empty($_POST['Message2'])){
     $text = $_POST['Message2'];
     countWords('text',$text);
 }
-?>
